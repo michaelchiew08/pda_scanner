@@ -25,6 +25,8 @@ dependencies:
 -  [x] UROVO(优博讯)-PDA
 -  [x] HONEYWELL(霍尼韦尔)-PDA
 -  [x] PL(攀凌)-PDA
+-  [x] NEWLAND(新大陆)-PDA
+-  [x] KAICOM(凯立)-PDA
 
 ## Usage
 ```dart
