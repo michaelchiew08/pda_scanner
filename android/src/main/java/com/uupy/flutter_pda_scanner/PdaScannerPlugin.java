@@ -103,14 +103,14 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
         activity.registerReceiver(scanReceiver, kaicomIntentFilter);
     }
 
-    // // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
-    // @Deprecated()
-    // @SuppressLint("Registrar")
-    // public static void registerWith(Registrar registrar) {
-    //     channel = new EventChannel(registrar.messenger(), CHANNEL);
-    //     PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
-    //     channel.setStreamHandler(plugin);
-    // }
+    // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
+    @Deprecated()
+    @SuppressLint("Registrar")
+    public static void registerWith(Registrar registrar) {
+        channel = new EventChannel(registrar.messenger(), CHANNEL);
+        PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
+        channel.setStreamHandler(plugin);
+    }
 
     @Override
     public void onListen(Object o, final EventChannel.EventSink eventSink) {
@@ -118,19 +118,16 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
     }
 
     @Override
+    public void onCancel(Object o) {
+        Log.i("PdaScannerPlugin", "PdaScannerPlugin:onCancel");
+    }
+
+    // The method that use v2 Android embedding.
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding, Registrar registrar) {
         channel = new EventChannel(registrar.messenger(), CHANNEL);
         PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
         channel.setStreamHandler(plugin);
     }
 
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-
-    }
-
-    @Override
-    public void onCancel(Object o) {
-        Log.i("PdaScannerPlugin", "PdaScannerPlugin:onCancel");
-    }
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) { }
 }
