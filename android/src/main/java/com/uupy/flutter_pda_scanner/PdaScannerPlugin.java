@@ -103,14 +103,14 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
         activity.registerReceiver(scanReceiver, kaicomIntentFilter);
     }
 
-    // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
-    @Deprecated()
-    @SuppressLint("Registrar")
-    public static void registerWith(Registrar registrar) {
-        channel = new EventChannel(registrar.messenger(), CHANNEL);
-        PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
-        channel.setStreamHandler(plugin);
-    }
+    // // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
+    // @Deprecated()
+    // @SuppressLint("Registrar")
+    // public static void registerWith(Registrar registrar) {
+    //     channel = new EventChannel(registrar.messenger(), CHANNEL);
+    //     PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
+    //     channel.setStreamHandler(plugin);
+    // }
 
     @Override
     public void onListen(Object o, final EventChannel.EventSink eventSink) {
