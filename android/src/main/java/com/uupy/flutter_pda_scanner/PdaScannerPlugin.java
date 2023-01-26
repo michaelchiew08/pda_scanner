@@ -118,7 +118,7 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
     }
 
     @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding, Registrar registrar) {
         channel = new EventChannel(registrar.messenger(), CHANNEL);
         PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
         channel.setStreamHandler(plugin);
