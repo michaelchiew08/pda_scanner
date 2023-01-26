@@ -8,9 +8,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
-public class PdaScannerPlugin implements EventChannel.StreamHandler {
+public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandler {
     private static final String CHANNEL = "com.uupy.flutter_pda_scanner/plugin";
     private static final String XM_SCAN_ACTION = "com.android.server.scannerservice.broadcast";
     private static final String SHINIOW_SCAN_ACTION = "com.android.server.scannerservice.shinow";
@@ -23,6 +24,7 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
     private static final String KAICOM_SCAN_ACTION = "com.android.receive_scan_action";
 
     private static EventChannel.EventSink eventSink;
+    private static EventChannel channel;
 
     private static final BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
@@ -84,10 +86,25 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
         honeywellIntentFilter.addAction(HONEYWELL_SCAN_ACTION);
         honeywellIntentFilter.setPriority(Integer.MAX_VALUE);
         activity.registerReceiver(scanReceiver, honeywellIntentFilter);
+
+        // 新大陆
+        IntentFilter newlandIntentFilter = new IntentFilter();
+        newlandIntentFilter.addAction(NL_SCAN_ACTION);
+        newlandIntentFilter.setPriority(Integer.MAX_VALUE);
+        activity.registerReceiver(scanReceiver, newlandIntentFilter);
+
+        // 凯立
+        IntentFilter kaicomIntentFilter = new IntentFilter();
+        kaicomIntentFilter.addAction(KAICOM_SCAN_ACTION);
+        kaicomIntentFilter.setPriority(Integer.MAX_VALUE);
+        activity.registerReceiver(scanReceiver, kaicomIntentFilter);
     }
 
-    public static void registerWith(PluginRegistry.Registrar registrar) {
-        EventChannel channel = new EventChannel(registrar.messenger(), CHANNEL);
+    // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
+    @Deprecated()
+    @SuppressLint("Registrar")
+    public static void registerWith(Registrar registrar) {
+        channel = new EventChannel(registrar.messenger(), CHANNEL);
         PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
         channel.setStreamHandler(plugin);
     }
@@ -95,6 +112,18 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
     @Override
     public void onListen(Object o, final EventChannel.EventSink eventSink) {
         PdaScannerPlugin.eventSink = eventSink;
+    }
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new EventChannel(registrar.messenger(), CHANNEL);
+        PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
+        channel.setStreamHandler(plugin);
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+
     }
 
     @Override
