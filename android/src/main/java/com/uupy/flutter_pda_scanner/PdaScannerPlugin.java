@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
-public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandler {
+public class PdaScannerPlugin implements EventChannel.StreamHandler {
     private static final String CHANNEL = "com.uupy.flutter_pda_scanner/plugin";
     private static final String XM_SCAN_ACTION = "com.android.server.scannerservice.broadcast";
     private static final String SHINIOW_SCAN_ACTION = "com.android.server.scannerservice.shinow";
@@ -104,8 +103,8 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
     }
 
     // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
-    @Deprecated()
-    @SuppressLint("Registrar")
+    // @Deprecated()
+    // @SuppressLint("Registrar")
     public static void registerWith(Registrar registrar) {
         channel = new EventChannel(registrar.messenger(), CHANNEL);
         PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
@@ -122,12 +121,12 @@ public class PdaScannerPlugin implements FlutterPlugin, EventChannel.StreamHandl
         Log.i("PdaScannerPlugin", "PdaScannerPlugin:onCancel");
     }
 
-    // The method that use v2 Android embedding.
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding, Registrar registrar) {
-        channel = new EventChannel(registrar.messenger(), CHANNEL);
-        PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
-        channel.setStreamHandler(plugin);
-    }
+    // // The method that use v2 Android embedding.
+    // public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding, Registrar registrar) {
+    //     channel = new EventChannel(registrar.messenger(), CHANNEL);
+    //     PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
+    //     channel.setStreamHandler(plugin);
+    // }
 
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) { }
+    // public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) { }
 }
