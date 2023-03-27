@@ -10,7 +10,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import io.flutter.plugin.common;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.embedding.android.FlutterActivity;
@@ -150,5 +149,11 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlug
 
     @Override
     public void onDetachedFromActivity() {
+        Log.i("PdaScannerPlugin", "PdaScannerPlugin:onDetachedFromActivity");
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(ActivityPluginBinding activityBinding) {
+        Log.i("PdaScannerPlugin", "PdaScannerPlugin:onReattachedToActivityForConfigChanges");
     }
 }
