@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import io.flutter.plugin.common;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.embedding.android.FlutterActivity;
