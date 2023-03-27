@@ -10,13 +10,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.embedding.android.FlutterActivity;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlugin, ActivityAware {
     private static final String CHANNEL = "com.uupy.flutter_pda_scanner/plugin";
