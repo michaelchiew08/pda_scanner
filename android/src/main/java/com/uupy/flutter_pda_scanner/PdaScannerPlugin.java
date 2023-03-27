@@ -12,8 +12,13 @@ import androidx.annotation.NonNull;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 
-public class PdaScannerPlugin implements EventChannel.StreamHandler {
+public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlugin, ActivityAware {
     private static final String CHANNEL = "com.uupy.flutter_pda_scanner/plugin";
     private static final String XM_SCAN_ACTION = "com.android.server.scannerservice.broadcast";
     private static final String SHINIOW_SCAN_ACTION = "com.android.server.scannerservice.shinow";
@@ -27,6 +32,7 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
 
     private static EventChannel.EventSink eventSink;
     private static EventChannel channel;
+    private static BinaryMessenger binaryMessenger;
 
     private static final BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
@@ -105,6 +111,7 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
     // This static method is only to remain compatible with apps that don’t use the v2 Android embedding.
     // @Deprecated()
     // @SuppressLint("Registrar")
+    @SuppressWarnings("deprecation")
     public static void registerWith(Registrar registrar) {
         channel = new EventChannel(registrar.messenger(), CHANNEL);
         PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
@@ -121,12 +128,26 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler {
         Log.i("PdaScannerPlugin", "PdaScannerPlugin:onCancel");
     }
 
-    // // The method that use v2 Android embedding.
-    // public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding, Registrar registrar) {
-    //     channel = new EventChannel(registrar.messenger(), CHANNEL);
-    //     PdaScannerPlugin plugin = new PdaScannerPlugin(registrar.activity());
-    //     channel.setStreamHandler(plugin);
-    // }
+    // The method that use v2 Android embedding.
+    @Override
+    public void onAttachedToEngine(FlutterPluginBinding binding) {
+        binaryMessenger = binding.getBinaryMessenger();
+    }
 
-    // public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) { }
+    @Override
+    public void onDetachedFromEngine(FlutterPluginBinding binding) { 
+        channel.setStreamHandler(null);
+        channel = null;
+    }
+
+    @Override
+    public void onAttachedToActivity(ActivityPluginBinding activityBinding) {        
+        channel = new EventChannel(binaryMessenger, CHANNEL);
+        PdaScannerPlugin plugin = new PdaScannerPlugin(activityBinding.getActivity());
+        channel.setStreamHandler(plugin);
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+    }
 }
