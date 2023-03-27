@@ -134,7 +134,7 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlug
     // The method that use v2 Android embedding.
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
-        binaryMessenger = binding.getBinaryMessenger();
+        channel = new EventChannel(binding.getFlutterEngine().getDartExecutor(), CHANNEL);
     }
 
     @Override
@@ -144,8 +144,7 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlug
     }
 
     @Override
-    public void onAttachedToActivity(ActivityPluginBinding activityBinding) {        
-        channel = new EventChannel(binaryMessenger, CHANNEL);
+    public void onAttachedToActivity(ActivityPluginBinding activityBinding) {     
         PdaScannerPlugin plugin = new PdaScannerPlugin(activityBinding.getActivity());
         channel.setStreamHandler(plugin);
     }
