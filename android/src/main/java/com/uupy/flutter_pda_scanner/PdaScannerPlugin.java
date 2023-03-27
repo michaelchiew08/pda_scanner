@@ -153,6 +153,11 @@ public class PdaScannerPlugin implements EventChannel.StreamHandler, FlutterPlug
     }
 
     @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        Log.i("PdaScannerPlugin", "PdaScannerPlugin:onDetachedFromActivityForConfigChanges");
+    }
+
+    @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding activityBinding) {
         Log.i("PdaScannerPlugin", "PdaScannerPlugin:onReattachedToActivityForConfigChanges");
     }
